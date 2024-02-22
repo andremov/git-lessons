@@ -1,5 +1,3 @@
-import { type TrimmingMethod, type PairPattern } from "./state";
-
 export type DirectedNode = {
   isSelected: boolean;
   shouldRender: boolean;
@@ -12,6 +10,8 @@ export type DirectedNode = {
 export type BiDirectedNode = {
   id: number;
   connectedTo: number[];
+  shouldRender: boolean;
+  isSelected: boolean;
 };
 
 export type Link = {
@@ -40,19 +40,13 @@ export type DirectedGraph = {
   adjacency: number[][];
   nodes: DirectedNode[];
   links: Link[];
-  pushRelabel: {
-    raw: Record<PairPattern, PushRelabelMetadata>;
-    trimmed: Record<PairPattern, PushRelabelMetadata>;
-    rawMerged?: PushRelabelMetadata;
-    trimmedMerged:
-      | Record<TrimmingMethod, PushRelabelMetadata>
-      | Record<string, never>;
-  };
 };
 
 export type BiDirectedGraph = {
+  startsAt1: boolean;
   nodes: BiDirectedNode[];
   links: Link[];
+  description: string;
 };
 
 export type DownloadableGraph = {

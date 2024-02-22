@@ -4,23 +4,15 @@ import clsx from "clsx";
 import * as d3 from "d3";
 import { useMemo } from "react";
 import { useRender, useDimensions } from "~/hooks";
-import { parseGraphToId, parseLinkToLinkId } from "~/lib/helpers";
+import { parseGraphToId, parseLinkToLinkId } from "~/utils/functions";
 import type { SimulationLink, SimulationNode } from "~/types/d3";
 import type { DirectedGraph } from "~/types/graph";
 
 type DirectedGraphWithWeightsProps = {
   data: DirectedGraph;
-  height?: number;
-  width?: number;
-  visibleNodes?: number[];
-  visibleLinks?: { source: number; target: number }[];
 };
 
-export function DirectedGraphWithWeights({
-  data,
-  visibleNodes,
-  visibleLinks,
-}: DirectedGraphWithWeightsProps) {
+export function GraphView({ data }: DirectedGraphWithWeightsProps) {
   const strokeWidth = 2;
   const radius = 15;
 
@@ -35,6 +27,7 @@ export function DirectedGraphWithWeights({
     },
   };
 
+  const graphId = parseGraphToId(data);
   const color = d3.scaleOrdinal(
     [1, 2, 3, 4],
     [
@@ -50,34 +43,27 @@ export function DirectedGraphWithWeights({
       ...node,
       shouldRender: true,
     })) as SimulationNode[];
-    if (visibleNodes?.length) {
-      toRender = toRender.map((node) => ({
-        ...node,
-        shouldRender: visibleNodes.includes(node.id),
-      }));
-    }
+
+    toRender = toRender.map((node) => ({
+      ...node,
+      shouldRender: true,
+    }));
 
     return toRender;
-  }, [data.nodes, visibleNodes]);
+  }, [data.nodes]);
 
   const links = useMemo(() => {
     let toRender = data.links.map((link) => ({
       ...link,
       shouldRender: true,
     })) as SimulationLink[];
-    if (visibleLinks?.length) {
-      toRender = toRender.map((link) => ({
-        ...link,
-        shouldRender: visibleLinks.some(
-          (visibleLink) =>
-            visibleLink.source === link.source &&
-            visibleLink.target === link.target,
-        ),
-      }));
-    }
+    toRender = toRender.map((link) => ({
+      ...link,
+      shouldRender: true,
+    }));
 
     return toRender;
-  }, [data.links, visibleLinks]);
+  }, [data.links]);
 
   const [wrapperRef, dimensions] = useDimensions({
     height: window.innerHeight,
@@ -246,7 +232,7 @@ export function DirectedGraphWithWeights({
         const getMiddleY = (link: SimulationLink) =>
           (getY(link.source) + getY(link.target)) / 2;
         const getLinkTextBB = (link: SimulationLink) => {
-          const textId = "text";
+          const textId = parseLinkToLinkId(link) + "-text";
           const text = document.getElementById(textId);
           if (!text) return undefined;
 

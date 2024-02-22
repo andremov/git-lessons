@@ -1,6 +1,5 @@
 import type { SimulationLink, SimulationNode } from "~/types/d3";
-import type { Link } from "~/types/graph";
-import { type DirectedGraph } from "~/types/graph";
+import type { DirectedGraph, Link } from "~/types/graph";
 
 const decodableLinkSeparator = ":";
 
