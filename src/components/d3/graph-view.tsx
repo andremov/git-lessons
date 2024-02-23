@@ -6,7 +6,7 @@ import { useMemo } from "react";
 import { useRender, useDimensions } from "~/hooks";
 import { parseGraphToId, parseLinkToLinkId } from "~/utils/functions";
 import type { SimulationLink, SimulationNode } from "~/types/d3";
-import type { HierarchyGraph, HierarchyGraphNode } from "~/types/graph";
+import type { HierarchyGraph } from "~/types/graph";
 
 type DirectedGraphWithWeightsProps = {
   data: HierarchyGraph;
@@ -19,7 +19,9 @@ function getPathForLink(link: SimulationLink): string {
 
   const callback = d3
     .linkVertical()
+    // @ts-expect-error This exists, I promise.
     .x((d) => d.x)
+    // @ts-expect-error This exists, I promise.
     .y((d) => d.y)
     // @ts-expect-error This exists, I promise.
     .source(() => link.source)
@@ -76,35 +78,6 @@ export function GraphView({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [graphId]);
 
-  // const [width, height, viewBox] = useMemo(() => {
-  //   const height = dimensions.height;
-
-  //   let y0 = Infinity;
-  //   let y1 = -y0;
-
-  //   root.each((d: unknown) => {
-  //     const parsedNode = d as { y: number };
-  //     if (!parsedNode.y) return;
-
-  //     if (parsedNode.y > y1) {
-  //       y1 = parsedNode.y;
-  //     }
-  //     if (parsedNode.y < y0) {
-  //       y0 = parsedNode.y;
-  //     }
-  //   });
-
-  //   // Compute the adjusted height of the tree.
-  //   const width = y1 - y0 + dy * 2;
-
-  //   return [
-  //     width,
-  //     height,
-  //     `${[-dx / 3, y0 - 2 * dy, width, height].toString()}`,
-  //   ];
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [graphId]);
-
   const links = useMemo(() => {
     return root.links() as unknown[] as SimulationLink[];
 
@@ -125,60 +98,12 @@ export function GraphView({
 
   const { svgRef, zoomRef } = useRender({
     render(svgElem) {
-      const link = svgElem
-        .selectAll<SVGLineElement, SimulationLink>(".link")
-        .data(links);
+      svgElem.selectAll<SVGLineElement, SimulationLink>(".link").data(links);
 
-      // const link = svgElem
-      // .append("g")
-      // .attr("fill", "none")
-      // .attr("stroke", "#555")
-      // .attr("stroke-opacity", 0.4)
-      // .attr("stroke-width", 1.5)
-      // .selectAll()
-      // .data(root.links())
-      // .join("path")
-      // .attr(
-      //   "d",
-      //   d3
-      //     // @ts-expect-error asd
-      //     .linkVertical()
-      //     // @ts-expect-error asd
-      //     .x((d) => d.x)
-      //     // @ts-expect-error asd
-      //     .y((d) => d.y),
-      // );
-
-      const node = svgElem
+      svgElem
         .select("#nodes")
         .selectAll<SVGCircleElement, SimulationNode>("text")
         .data(nodes);
-
-      // const node = svgElem
-      //   .append("g")
-      //   .attr("stroke-linejoin", "round")
-      //   .attr("stroke-width", 3)
-      //   .selectAll()
-      //   .data(root.descendants())
-      //   .join("g")
-      //   .attr("transform", (d) => `translate(${d.x},${d.y})`);
-
-      // node
-      //   .append("text")
-      //   .attr("dy", "0.31em")
-      //   .attr("x", (d) => (d.children ? -6 : 6))
-      //   .attr("text-anchor", "middle")
-      //   .text((d) => d.data.name)
-      //   .clone(true)
-      //   .lower()
-      //   .attr("stroke", "white");
-
-      // node
-      //   .append("circle")
-      //   .attr("fill", (d) =>
-      //     d.children ? colors.target.fill : colors.default.fill,
-      //   )
-      //   .attr("r", 10);
     },
     onZoom: (svg, g) => {
       // fixes zooming on Mozilla Firefox.
