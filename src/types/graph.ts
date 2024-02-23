@@ -1,26 +1,39 @@
-export type DirectedNode = {
-  id: number;
+// export type HierarchyNode = {
+//   id: number;
+//   shouldRender: boolean;
+//   isSelected: boolean;
+//   outgoing: number[];
+//   incoming: number[];
+// };
+
+// export type Link = {
+//   source: number;
+//   target: number;
+//   isSelected: boolean;
+//   shouldRender: boolean;
+// };
+
+// export type HierarchyGraph = {
+//   description: string;
+//   nodes: HierarchyNode[];
+//   links: Link[];
+// };
+export type HierarchyGraphNode = {
+  name: string;
   shouldRender: boolean;
   isSelected: boolean;
-  outgoing: number[];
-  incoming: number[];
+  x: number;
+  y: number;
+  children: HierarchyGraphNode[];
 };
 
-export type Link = {
-  source: number;
-  target: number;
-  isSelected: boolean;
-  shouldRender: boolean;
+export type HierarchyGraph = HierarchyGraphNode;
+
+export type IncompleteHierarchyNode = {
+  id: string;
+  parent?: string;
 };
 
-export type DirectedGraph = {
-  startsAt1: boolean;
-  renderWeights: boolean;
-  description: string;
-  sources: number[];
-  targets: number[];
-  capacities: number[][];
-  adjacency: number[][];
-  nodes: DirectedNode[];
-  links: Link[];
+export type IncompleteHierarchyGraph = {
+  nodes: IncompleteHierarchyNode[];
 };

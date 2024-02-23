@@ -1,6 +1,6 @@
-import type { DirectedNode, Link } from "./graph";
+import type { HierarchyNode, Link } from "./graph";
 
-export type SimulationNode = d3.SimulationNodeDatum & DirectedNode;
+export type SimulationNode = d3.SimulationNodeDatum & HierarchyNode;
 
 export type SimulationLink = d3.SimulationLinkDatum<SimulationNode> &
   Link & {

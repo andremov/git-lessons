@@ -1,7 +1,7 @@
 import type { StateCreator } from "zustand";
 import type { gitStoreMiddlewares, StoreState } from "~/store";
 import type { GitSlice } from "./gitSlice.types";
-import type { DirectedGraph } from "~/types/graph";
+import type { HierarchyGraph } from "~/types/graph";
 
 export const createGitSlice: StateCreator<
   StoreState,
@@ -12,7 +12,7 @@ export const createGitSlice: StateCreator<
   lesson: 1,
   activeGraph: undefined,
 
-  setActiveGraph: (newActiveGraph: DirectedGraph) => {
+  setActiveGraph: (newActiveGraph: HierarchyGraph) => {
     set({
       activeGraph: newActiveGraph,
     });
