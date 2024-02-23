@@ -60,13 +60,11 @@ const inputGraph: IncompleteHierarchyGraph = {
 
 export default function HomePage() {
   const basicGraph: HierarchyGraph = buildHierarchyGraph(inputGraph);
-  console.log(basicGraph);
-
   const source = "ABCDEF F BCG ADFHIJG AKJDDJDCG IJ BF BKL";
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-      <GraphView data={basicGraph} />
+      <GraphView data={basicGraph} description={"Basic graph"} />
       {/* <div className="flex gap-1 text-5xl">
         {source.split("").map((letter, index) => (
           <div className={"w-7 text-center " + color_table[letter]} key={index}>

@@ -1,8 +1,12 @@
-import type { HierarchyNode, Link } from "./graph";
+import type { HierarchyGraphNode } from "./graph";
 
-export type SimulationNode = d3.SimulationNodeDatum & HierarchyNode;
+export type SimulationNode = d3.SimulationNodeDatum & {
+  data: HierarchyGraphNode;
+  x: number;
+  y: number;
+};
 
-export type SimulationLink = d3.SimulationLinkDatum<SimulationNode> &
-  Link & {
-    boundingBox?: DOMRect;
-  };
+export type SimulationLink = d3.SimulationLinkDatum<SimulationNode> & {
+  source: SimulationNode;
+  target: SimulationNode;
+};

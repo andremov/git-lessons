@@ -1,24 +1,16 @@
-import type { SimulationLink, SimulationNode } from "~/types/d3";
+import type { SimulationLink } from "~/types/d3";
 import type {
   HierarchyGraph,
   HierarchyGraphNode,
   IncompleteHierarchyGraph,
   IncompleteHierarchyNode,
-  // Link,
 } from "~/types/graph";
 
-const decodableLinkSeparator = ":";
+// const decodableLinkSeparator = ":";
 
-// export function parseLinkToLinkId(link: Link) {
-//   const asSimulationLink = link as SimulationLink;
-//   const source = asSimulationLink.source as SimulationNode;
-//   const target = asSimulationLink.target as SimulationNode;
-//   if (source.id >= 0 && target.id >= 0) {
-//     return [source.id, target.id, link.weight].join(decodableLinkSeparator);
-//   }
-
-//   return [link.source, link.target, link.weight].join(decodableLinkSeparator);
-// }
+export function parseLinkToLinkId(link: SimulationLink) {
+  return `${link.source.data.name}->${link.target.data.name}`;
+}
 
 export function parseGraphToId(graph: HierarchyGraph): string {
   const children = graph.children
@@ -40,8 +32,6 @@ export function buildHierarchyGraph(
         name: "",
         isSelected: false,
         shouldRender: false,
-        x: 0,
-        y: 0,
         children: [],
       };
     }
@@ -66,8 +56,6 @@ function buildHierarchyGraphNode(
     name: inputNode.id,
     isSelected: false,
     shouldRender: true,
-    x: 0,
-    y: 0,
     children: children ?? [],
   };
 }
