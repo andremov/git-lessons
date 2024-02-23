@@ -6,7 +6,7 @@ import { useMemo } from "react";
 import { useRender, useDimensions } from "~/hooks";
 import { parseGraphToId, parseLinkToLinkId } from "~/utils/functions";
 import type { SimulationLink, SimulationNode } from "~/types/d3";
-import type { HierarchyGraph } from "~/types/graph";
+import type { HierarchyGraph, HierarchyGraphNode } from "~/types/graph";
 
 type DirectedGraphWithWeightsProps = {
   data: HierarchyGraph;
@@ -69,7 +69,7 @@ export function GraphView({
     root.sort((a, b) => d3.ascending(a.data.name, b.data.name));
 
     // Create a tree layout
-    const tree = d3.tree<SimulationNode>().nodeSize([dx, dy]);
+    const tree = d3.tree<HierarchyGraphNode>().nodeSize([dx, dy]);
 
     // Apply the layout
     tree(root);
@@ -110,9 +110,11 @@ export function GraphView({
       if (navigator.userAgent.indexOf("Firefox") !== -1)
         g.style("transform-origin", "50% 50% 0");
 
-      const onZoom = ({
-        transform,
-      }: d3.D3ZoomEvent<SVGSVGElement, unknown>) => {
+      const onZoom = (
+        {
+          // transform,
+        }: d3.D3ZoomEvent<SVGSVGElement, unknown>,
+      ) => {
         // g.attr("transform", transform.toString());
       };
 
@@ -213,7 +215,7 @@ export function GraphView({
             })}
           </g>
           <g id="nodes" strokeWidth={strokeWidth}>
-            {nodes.map((node, index) => (
+            {nodes.map((node) => (
               <g
                 key={node.data.name}
                 className={clsx({

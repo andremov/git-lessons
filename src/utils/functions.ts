@@ -6,8 +6,6 @@ import type {
   IncompleteHierarchyNode,
 } from "~/types/graph";
 
-// const decodableLinkSeparator = ":";
-
 export function parseLinkToLinkId(link: SimulationLink) {
   return `${link.source.data.name}->${link.target.data.name}`;
 }
