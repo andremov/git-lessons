@@ -2,7 +2,10 @@ import { useEffect, useRef } from "react";
 import * as d3 from "d3";
 
 type UseD3RenderProps = {
-  render: (svg: d3.Selection<SVGSVGElement, unknown, null, unknown>) => void;
+  render: (
+    rootSvgElement: d3.Selection<SVGSVGElement, unknown, null, unknown>,
+    zoomSvgElement: d3.Selection<SVGGElement, unknown, null, unknown>,
+  ) => void;
   renderDependencies?: readonly unknown[];
   onZoom: (
     svg: d3.Selection<SVGSVGElement, unknown, null, unknown>,
@@ -22,9 +25,11 @@ export default function useD3Render({
 
   useEffect(() => {
     if (!svgRef.current) return;
+    if (!zoomRef.current) return;
 
-    const selection = d3.select(svgRef.current);
-    render(selection);
+    const svgElement = d3.select(svgRef.current);
+    const zoomElement = d3.select(zoomRef.current);
+    render(svgElement, zoomElement);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, renderDependencies ?? []);
